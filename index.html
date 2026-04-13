@@ -295,19 +295,22 @@
                     <option value="before">前</option>
                 </select>
             </div>
-            <div class="input-group checkbox-group">
+            
+            <button id="calculateDay">計算</button>
+
+            <div class="result-area">
+                <p>結果: <span id="resultDayCalculation"></span></p>
+                <p id="skippedDaysInfo" style="font-size: 0.8em; margin-top: 5px; color: #666;"></p>
+                <button class="share-button" data-target="resultDayCalculationWithSkipped">結果をコピー</button>
+            </div>
+
+            <div class="input-group checkbox-group" style="margin-top: 20px;">
                 <input type="checkbox" id="includeStartDate">
                 <label for="includeStartDate">初日を含む</label>
             </div>
             <div class="input-group checkbox-group">
                 <input type="checkbox" id="skipWeekends">
                 <label for="skipWeekends">土日を除いて計算</label>
-            </div>
-            <button id="calculateDay">計算</button>
-            <div class="result-area">
-                <p>結果: <span id="resultDayCalculation"></span></p>
-                <p id="skippedDaysInfo" style="font-size: 0.8em; margin-top: 5px; color: #666;"></p>
-                <button class="share-button" data-target="resultDayCalculationWithSkipped">結果をコピー</button>
             </div>
             <div id="resultDayCalculationWithSkipped" style="display: none;"></div>
         </div>
@@ -323,19 +326,22 @@
                 <label for="endDateDiff">終了日:</label>
                 <input type="date" id="endDateDiff">
             </div>
-            <div class="input-group checkbox-group">
+
+            <button id="calculateDateDiff">計算</button>
+
+            <div class="result-area">
+                <p>日付差: <span id="resultDateDifference"></span></p>
+                <p id="skippedDaysInfoDiff" style="font-size: 0.8em; margin-top: 5px; color: #666;"></p>
+                <button class="share-button" data-target="resultDateDifferenceWithSkipped">結果をコピー</button>
+            </div>
+
+            <div class="input-group checkbox-group" style="margin-top: 20px;">
                 <input type="checkbox" id="includeStartDateDiff">
                 <label for="includeStartDateDiff">初日を含む</label>
             </div>
             <div class="input-group checkbox-group">
                 <input type="checkbox" id="skipWeekendsDiff">
                 <label for="skipWeekendsDiff">土日を除いて計算</label>
-            </div>
-            <button id="calculateDateDiff">計算</button>
-            <div class="result-area">
-                <p>日付差: <span id="resultDateDifference"></span></p>
-                <p id="skippedDaysInfoDiff" style="font-size: 0.8em; margin-top: 5px; color: #666;"></p>
-                <button class="share-button" data-target="resultDateDifferenceWithSkipped">結果をコピー</button>
             </div>
             <div id="resultDateDifferenceWithSkipped" style="display: none;"></div>
         </div>
