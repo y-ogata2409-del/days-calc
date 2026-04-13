@@ -234,10 +234,10 @@
             }
             h2 { font-size: 1.2em; margin-bottom: 15px; }
             .input-group { padding-left: 0; margin-bottom: 8px; }
-            .input-group label { width: 65px; margin-left: 0; font-size: 13px; }
+            .input-group label { width: 50px; margin-left: 0; font-size: 12px; }
             .input-group input[type="date"] { flex: 1; padding: 6px; font-size: 14px; }
-            .input-group input[type="number"] { flex: 0 0 45px; }
-            .input-group select { flex: 1; font-size: 14px; }
+            .input-group input[type="number"] { flex: 0 0 40px; padding: 6px 2px; }
+            .input-group select { min-width: 0; padding: 6px 2px; font-size: 13px; margin-left: 2px;}
             .input-group.checkbox-group { padding-left: 0; }
             .result-area p { font-size: 1.1rem; }
             .share-button { width: 100%; padding: 10px; }
@@ -539,6 +539,9 @@
             // 初回計算
             calculateDayButton.click();
             calculateDateDiffButton.click();
+
+            // 「期間」入力欄をクリックした時に全選択する設定
+            document.getElementById('calcAmount').addEventListener('focus', (e) => e.target.select());
         });
     </script>
 </body>
