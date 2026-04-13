@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日数計算</title>
+    <style>
+        /* --- CSS --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        main {
+            max-width: 750px;
+            width: 90%;
+            margin: 15px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            flex-grow: 1;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 5px 5px 0 0;
+            margin: 0 5px;
+            flex-grow: 1;
+            text-align: center;
+            white-space: nowrap;
+            max-width: 250px;
+        }
+
+        .tab-button.active {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border-bottom: 2px solid #007bff;
+        }
+
+        .tab-button:hover:not(.active) {
+            background-color: #e0e0e0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2 {
+            color: #007bff;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding-left: 135px;
+        }
+
+        .input-group label {
+            width: 120px;
+            text-align: right;
+            padding-right: 15px;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            margin-left: -135px;
+            font-weight: bold;
+        }
+
+        .input-group input[type="date"] {
+            flex: 0 0 180px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .input-group input[type="number"] {
+            flex: 0 0 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .input-group select {
+            flex: 0 0 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-left: 5px;
+        }
+
+        .input-group.checkbox-group {
+            padding-left: 135px;
+            margin-bottom: 5px;
+        }
+
+        .input-group.checkbox-group label {
+            width: auto;
+            text-align: left;
+            padding-right: 0;
+            margin-left: 5px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .input-group.checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        button#calculateDay, button#calculateDateDiff {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 17px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result-area {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border: 1px solid #cce5ff;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-area p {
+            margin: 0;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .share-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .share-button:hover {
+            background-color: #5a6268;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #777;
+            font-size: 12px;
+            background-color: #f0f0f0;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                margin: 10px;
+                padding: 15px 10px;
+                width: auto;
+            }
+            h2 { font-size: 1.2em; margin-bottom: 15px; }
+            .input-group { padding-left: 0; margin-bottom: 8px; }
+            .input-group label { width: 65px; margin-left: 0; font-size: 13px; }
+            .input-group input[type="date"] { flex: 1; padding: 6px; font-size: 14px; }
+            .input-group input[type="number"] { flex: 0 0 45px; }
+            .input-group select { flex: 1; font-size: 14px; }
+            .input-group.checkbox-group { padding-left: 0; }
+            .result-area p { font-size: 1.1rem; }
+            .share-button { width: 100%; padding: 10px; }
+        }
+
+        .flash-active { animation: flash-animation 0.4s ease-out; }
+        @keyframes flash-animation {
+            0% { background-color: #fff3cd; transform: scale(1.02); }
+            100% { background-color: #e9f5ff; transform: scale(1); }
+        }
+
+        .reset-today-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>日数計算</h1>
+    </header>
+
+    <main>
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="day-calculation">日数計算</button>
+            <button class="tab-button" data-tab="date-difference">日付差計算</button>
+        </nav>
+
+        <div id="day-calculation" class="tab-content active">
+            <h2>〇日後 / 〇日前を計算</h2>
+            <div class="input-group">
+                <label for="calcDayBaseDate">基準日:</label>
+                <input type="date" id="calcDayBaseDate">
+                <button id="resetCalcDay" class="reset-today-btn" title="今日に戻す" style="display:none;">↩</button>
+            </div>
+            <div class="input-group">
+                <label for="calcAmount">期間:</label>
+                <input type="number" id="calcAmount" value="49">
+                <select id="calcUnit">
+                    <option value="day">日</option>
+                    <option value="week">週間</option>
+                </select>
+                <select id="calcOffsetType">
+                    <option value="after">後</option>
+                    <option value="before">前</option>
+                </select>
+            </div>
+            <div class="input-group checkbox-group">
+                <input type="checkbox" id="includeStartDate">
+                <label for="includeStartDate">初日を含む</label>
+            </div>
+            <div class="input-group checkbox-group">
+                <input type="checkbox" id="skipWeekends">
+                <label for="skipWeekends">土日を除いて計算</label>
+            </div>
+            <button id="calculateDay">計算</button>
+            <div class="result-area">
+                <p>結果: <span id="resultDayCalculation"></span></p>
+                <p id="skippedDaysInfo" style="font-size: 0.8em; margin-top: 5px; color: #666;"></p>
+                <button class="share-button" data-target="resultDayCalculationWithSkipped">結果をコピー</button>
+            </div>
+            <div id="resultDayCalculationWithSkipped" style="display: none;"></div>
+        </div>
+
+        <div id="date-difference" class="tab-content">
+            <h2>2つの日付の差を計算</h2>
+            <div class="input-group">
+                <label for="startDateDiff">開始日:</label>
+                <input type="date" id="startDateDiff">
+                <button id="resetStartDiff" class="reset-today-btn" title="今日に戻す" style="display:none;">↩</button>
+            </div>
+            <div class="input-group">
+                <label for="endDateDiff">終了日:</label>
+                <input type="date" id="endDateDiff">
+            </div>
+            <div class="input-group checkbox-group">
+                <input type="checkbox" id="includeStartDateDiff">
+                <label for="includeStartDateDiff">初日を含む</label>
+            </div>
+            <div class="input-group checkbox-group">
+                <input type="checkbox" id="skipWeekendsDiff">
+                <label for="skipWeekendsDiff">土日を除いて計算</label>
+            </div>
+            <button id="calculateDateDiff">計算</button>
+            <div class="result-area">
+                <p>日付差: <span id="resultDateDifference"></span></p>
+                <p id="skippedDaysInfoDiff" style="font-size: 0.8em; margin-top: 5px; color: #666;"></p>
+                <button class="share-button" data-target="resultDateDifferenceWithSkipped">結果をコピー</button>
+            </div>
+            <div id="resultDateDifferenceWithSkipped" style="display: none;"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+
+            // --- タブ切り替え ---
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // --- 初期日付設定 ---
+            const getTodayISO = () => {
+                const now = new Date();
+                return `${now.getFullYear()}-${('0' + (now.getMonth() + 1)).slice(-2)}-${('0' + now.getDate()).slice(-2)}`;
+            };
+
+            const todayISO = getTodayISO();
+            const syuuryouday = new Date();
+            syuuryouday.setDate(syuuryouday.getDate() + 56);
+            const syuuryouISO = `${syuuryouday.getFullYear()}-${('0' + (syuuryouday.getMonth() + 1)).slice(-2)}-${('0' + syuuryouday.getDate()).slice(-2)}`;
+
+            document.getElementById('calcDayBaseDate').value = todayISO;
+            document.getElementById('startDateDiff').value = todayISO;
+            document.getElementById('endDateDiff').value = syuuryouISO;
+
+            // --- 要素取得 ---
+            const calcDayBaseDateInput = document.getElementById('calcDayBaseDate');
+            const calcAmountInput = document.getElementById('calcAmount');
+            const calcUnitSelect = document.getElementById('calcUnit');
+            const calcOffsetTypeSelect = document.getElementById('calcOffsetType');
+            const includeStartDateCheckbox = document.getElementById('includeStartDate');
+            const skipWeekendsCheckbox = document.getElementById('skipWeekends');
+            const calculateDayButton = document.getElementById('calculateDay');
+            const resultDayCalculationSpan = document.getElementById('resultDayCalculation');
+            const skippedDaysInfoSpan = document.getElementById('skippedDaysInfo');
+            const resultDayCalculationWithSkippedDiv = document.getElementById('resultDayCalculationWithSkipped');
+
+            const startDateDiffInput = document.getElementById('startDateDiff');
+            const endDateDiffInput = document.getElementById('endDateDiff');
+            const includeStartDateDiffCheckbox = document.getElementById('includeStartDateDiff');
+            const skipWeekendsDiffCheckbox = document.getElementById('skipWeekendsDiff');
+            const calculateDateDiffButton = document.getElementById('calculateDateDiff');
+            const resultDateDifferenceSpan = document.getElementById('resultDateDifference');
+            const skippedDaysInfoDiffSpan = document.getElementById('skippedDaysInfoDiff');
+            const resultDateDifferenceWithSkippedDiv = document.getElementById('resultDateDifferenceWithSkipped');
+
+            // --- ヘルパー ---
+            function formatToJapaneseDateWithWeekday(date) {
+                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日（${dayNames[date.getDay()]}）`;
+            }
+            function isWeekend(date) {
+                return date.getDay() === 0 || date.getDay() === 6;
+            }
+
+            // --- ロジック1: 日数計算 ---
+            calculateDayButton.addEventListener('click', () => {
+                let baseDate = new Date(calcDayBaseDateInput.value);
+                let amount = parseInt(calcAmountInput.value, 10);
+                if (isNaN(baseDate.getTime()) || isNaN(amount)) return;
+
+                if (calcOffsetTypeSelect.value === 'before') amount *= -1;
+                let resultDate = new Date(baseDate);
+                let skippedDays = 0;
+
+                if (skipWeekendsCheckbox.checked && calcUnitSelect.value === 'day') {
+                    let daysToCount = Math.abs(amount);
+                    const direction = amount > 0 ? 1 : -1;
+                    let currentDate = new Date(baseDate);
+                    let currentWorkingDaysCounted = 0;
+
+                    if (amount !== 0) {
+                        if (includeStartDateCheckbox.checked) {
+                            if (!isWeekend(currentDate)) currentWorkingDaysCounted = 1;
+                            else skippedDays++;
+                        }
+                        while (currentWorkingDaysCounted < daysToCount) {
+                            currentDate.setDate(currentDate.getDate() + direction);
+                            if (isWeekend(currentDate)) skippedDays++;
+                            else currentWorkingDaysCounted++;
+                        }
+                        resultDate = currentDate;
+                    }
+                } else {
+                    let daysToAdd = amount;
+                    if (includeStartDateCheckbox.checked && amount !== 0) {
+                        daysToAdd = amount > 0 ? amount - 1 : amount + 1;
+                    }
+                    if (calcUnitSelect.value === 'day') resultDate.setDate(baseDate.getDate() + daysToAdd);
+                    else resultDate.setDate(baseDate.getDate() + daysToAdd * 7);
+                }
+
+                resultDayCalculationSpan.textContent = formatToJapaneseDateWithWeekday(resultDate);
+                skippedDaysInfoSpan.textContent = (skipWeekendsCheckbox.checked && calcUnitSelect.value === 'day') ? `（土日を${skippedDays}日スキップしました）` : '';
+                resultDayCalculationWithSkippedDiv.textContent = resultDayCalculationSpan.textContent + (skippedDaysInfoSpan.textContent ? ' ' + skippedDaysInfoSpan.textContent : '');
+                
+                const area = resultDayCalculationSpan.closest('.result-area');
+                area.classList.remove('flash-active');
+                void area.offsetWidth;
+                area.classList.add('flash-active');
+            });
+
+            // --- ロジック2: 日付差 ---
+            calculateDateDiffButton.addEventListener('click', () => {
+                let startDate = new Date(startDateDiffInput.value);
+                let endDate = new Date(endDateDiffInput.value);
+                if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return;
+
+                startDate.setHours(0,0,0,0); endDate.setHours(0,0,0,0);
+                let diffDays = 0, skippedDays = 0;
+                const actualStart = new Date(Math.min(startDate, endDate));
+                const actualEnd = new Date(Math.max(startDate, endDate));
+
+                let cur = new Date(actualStart);
+                while (cur <= actualEnd) {
+                    if (skipWeekendsDiffCheckbox.checked) {
+                        if (!isWeekend(cur)) diffDays++; else skippedDays++;
+                    } else diffDays++;
+                    cur.setDate(cur.getDate() + 1);
+                }
+                if (!includeStartDateDiffCheckbox.checked) {
+                    if (skipWeekendsDiffCheckbox.checked) { if (!isWeekend(actualStart)) diffDays--; } else diffDays--;
+                }
+
+                resultDateDifferenceSpan.textContent = `${diffDays} 日間`;
+                skippedDaysInfoDiffSpan.textContent = skipWeekendsDiffCheckbox.checked ? `（土日を${skippedDays}日スキップしました）` : '';
+                resultDateDifferenceWithSkippedDiv.textContent = resultDateDifferenceSpan.textContent + (skippedDaysInfoDiffSpan.textContent ? ' ' + skippedDaysInfoDiffSpan.textContent : '');
+
+                const area = resultDateDifferenceSpan.closest('.result-area');
+                area.classList.remove('flash-active');
+                void area.offsetWidth;
+                area.classList.add('flash-active');
+            });
+
+            // --- イベント連携 ---
+            [calcDayBaseDateInput, calcAmountInput, calcUnitSelect, calcOffsetTypeSelect, includeStartDateCheckbox, skipWeekendsCheckbox].forEach(el => {
+                el.addEventListener('input', () => calculateDayButton.click());
+            });
+            [startDateDiffInput, endDateDiffInput, includeStartDateDiffCheckbox, skipWeekendsDiffCheckbox].forEach(el => {
+                el.addEventListener('input', () => calculateDateDiffButton.click());
+            });
+
+            // ホイール操作
+            calcAmountInput.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                let v = parseInt(calcAmountInput.value, 10) || 0;
+                calcAmountInput.value = e.deltaY < 0 ? v + 7 : v - 7;
+                calculateDayButton.click();
+            }, { passive: false });
+
+            [calcDayBaseDateInput, startDateDiffInput, endDateDiffInput].forEach(input => {
+                input.addEventListener('wheel', (e) => {
+                    if (!input.value) return;
+                    e.preventDefault();
+                    const d = new Date(input.value);
+                    d.setDate(d.getDate() + (e.deltaY < 0 ? 1 : -1));
+                    input.value = `${d.getFullYear()}-${('0'+(d.getMonth()+1)).slice(-2)}-${('0'+d.getDate()).slice(-2)}`;
+                    input.dispatchEvent(new Event('input'));
+                }, { passive: false });
+            });
+
+            // リセットボタン
+            const updateBtn = (i, b) => b.style.display = i.value !== getTodayISO() ? 'flex' : 'none';
+            const pairs = [
+                { i: calcDayBaseDateInput, b: document.getElementById('resetCalcDay') },
+                { i: startDateDiffInput, b: document.getElementById('resetStartDiff') }
+            ];
+            pairs.forEach(p => {
+                p.b.addEventListener('click', () => { p.i.value = getTodayISO(); p.i.dispatchEvent(new Event('input')); });
+                p.i.addEventListener('input', () => updateBtn(p.i, p.b));
+                updateBtn(p.i, p.b);
+            });
+
+            // コピー
+            document.querySelectorAll('.share-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const txt = document.getElementById(e.target.dataset.target).textContent.trim();
+                    if (txt) {
+                        navigator.clipboard.writeText(txt).then(() => alert('コピーしました！')).catch(() => alert(txt));
+                    }
+                });
+            });
+
+            // 初回計算
+            calculateDayButton.click();
+            calculateDateDiffButton.click();
+        });
+    </script>
+</body>
+</html>
